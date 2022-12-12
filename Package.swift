@@ -5,11 +5,18 @@ import PackageDescription
 
 let package = Package(
     name: "RRuleKit",
+    defaultLocalization: "en",
+    platforms: [.iOS(.v15), .macOS(.v12)],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "RRuleKit",
-            targets: ["RRuleKit"]),
+            targets: ["RRuleKit"]
+        ),
+        .library(
+            name: "RRuleKitUI",
+            targets: ["RRuleKitUI"]
+        ),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -20,9 +27,17 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "RRuleKit",
-            dependencies: []),
+            dependencies: []
+        ),
+        .target(
+            name: "RRuleKitUI",
+            dependencies: [
+                .byName(name: "RRuleKit"),
+            ]
+        ),
         .testTarget(
             name: "RRuleKitTests",
-            dependencies: ["RRuleKit"]),
+            dependencies: ["RRuleKit"]
+        ),
     ]
 )

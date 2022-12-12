@@ -1,0 +1,27 @@
+"repeat" = "Repeat";
+"time" = "Time";
+"advance" = "Advance";
+"setup" = "Setup";
+
+// repeat
+"custom" = "Custom";
+
+// advance
+"timezone" = "Time Zone";
+"endRepeat" = "End Repeat";
+"never" = "Never";
+"on" = "On";
+"after" = "After";
+
+// custom
+"customRepeat" = "Custom Repeat";
+"frequency" = "Frequency";
+"minutely" = "Minutely";
+"hourly" = "Hourly";
+"daily" = "Daily";
+"weekly" = "Weekly";
+"monthly" = "Monthly";
+"yearly" = "Yearly";
+"every" = "Every";
+"each" = "Each";
+"onThe" = "On the...";
