@@ -115,12 +115,12 @@ public struct RuleSetupView: View {
     }
 
     private var repeatTitle: String {
-        let defaultOption = RepeatView.Option.defaultCases.first { option in
-            RepeatView.isEqual(rule, option.rule)
+        let defaultRule = defaultRules.first {
+            RepeatView.isEqual(rule, $0)
         }
 
-        if let defaultOption {
-            return defaultOption.title
+        if let defaultRule {
+            return defaultRule.toString
         } else {
             return Localized.custom
         }
