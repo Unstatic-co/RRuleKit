@@ -180,7 +180,11 @@ public class RuleParser {
         if let end = from.recurrenceEnd {
             switch end {
             case let .end(date):
-                parts.append("UNTIL=\(untilFormat.string(from: date))")
+                let formatter = untilFormat
+                if let timeZoneIdentifier = from.timeZoneIdentifier {
+                    formatter.timeZone = TimeZone(identifier: timeZoneIdentifier)
+                }
+                parts.append("UNTIL=\(formatter.string(from: date))")
             case let .occurrenceCount(count):
                 parts.append("COUNT=\(count)")
             }
@@ -217,7 +221,11 @@ public class RuleParser {
         guard let dateStart = from.dateStart, let timeZoneIdentifer = from.timeZoneIdentifier else {
             return nil
         }
-        return "DTSTART;TZID=\(timeZoneIdentifer):\(dateStartFormat.string(from: dateStart))"
+        let formatter = untilFormat
+        if let timeZoneIdentifier = from.timeZoneIdentifier {
+            formatter.timeZone = TimeZone(identifier: timeZoneIdentifier)
+        }
+        return "DTSTART;TZID=\(timeZoneIdentifer):\(formatter.string(from: dateStart))"
     }
 
     /// Including date start
