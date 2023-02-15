@@ -21,21 +21,23 @@ struct ContentView: View {
         ZStack {
             Spacer()
                 .sheet(isPresented: $isShowTimeTriggerSetupView) {
-                    RuleSetupView(rule: $rrule)
-                        .defaultRules([
-                            .everyDay,
-                            .everyWeekDay,
-                            .everyWeekend,
-                            .everyHour,
-                            .every15Mins,
-                        ])
-                        .title("Setup rule")
-                        .style(RuleSetupView.Style(
-                            accentColor: .red.opacity(0.7),
-                            labelPrimaryColor: .black.opacity(0.9),
-                            labelSecondaryColor: .gray,
-                            systemBackgroundSecondaryColor: .gray
-                        ))
+                    RuleSetupView(rule: $rrule) {
+                        Text("RRule")
+                    }
+                    .defaultRules([
+                        .everyDay,
+                        .everyWeekDay,
+                        .everyWeekend,
+                        .everyHour,
+                        .every15Mins,
+                    ])
+                    .title("Setup rule")
+                    .style(RuleSetupView.Style(
+                        accentColor: .red.opacity(0.7),
+                        labelPrimaryColor: .black.opacity(0.9),
+                        labelSecondaryColor: .gray,
+                        systemBackgroundSecondaryColor: .gray
+                    ))
                 }
 
             VStack {

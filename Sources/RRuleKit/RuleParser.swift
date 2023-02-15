@@ -33,11 +33,14 @@ public class RuleParser {
     /// - Parameters:
     ///   - left: The first RRULE string.
     ///   - right: The second RRULE string.
-    /// - Returns: `true` if the two rules have the same components, ignoring order and any `UNTIL` clause. `false` if different.
+    /// - Returns: `true` if the two rules have the same components, ignoring order and any `UNTIL` clause. `false` if
+    /// different.
     public func compare(rule left: String, to right: String) -> Bool {
         var leftParts = split(rule: left).sorted()
         var rightParts = split(rule: right).sorted()
-        if leftParts.first(where: { $0.hasPrefix("UNTIL") }) != nil, rightParts.first(where: { $0.hasPrefix("UNTIL") }) != nil {
+        if leftParts.first(where: { $0.hasPrefix("UNTIL") }) != nil,
+           rightParts.first(where: { $0.hasPrefix("UNTIL") }) != nil
+        {
             leftParts = leftParts.filter { !$0.hasPrefix("UNTIL") }
             rightParts = leftParts.filter { !$0.hasPrefix("UNTIL") }
         }
@@ -62,15 +65,23 @@ public class RuleParser {
     ///   - The RRULE string may optionally begin with `RRULE:`.
     ///   - There must be 1 `FREQ=` followed by either `DAILY`, `WEEKLY`, `MONTHLY`, `YEARLY`.
     ///   - There may be 1 `COUNT=` followed by a positive integer.
-    ///   - There may be 1 `UNTIL=` followed by a date. The date may be in one of these formats: "yyyyMMdd'T'HHmmssX", "yyyyMMdd'T'HHmmss", "'TZID'=VV:yyyyMMdd'T'HHmmss", "yyyyMMdd".
+    ///   - There may be 1 `UNTIL=` followed by a date. The date may be in one of these formats: "yyyyMMdd'T'HHmmssX",
+    /// "yyyyMMdd'T'HHmmss", "'TZID'=VV:yyyyMMdd'T'HHmmss", "yyyyMMdd".
     ///   - Only 1 of either `COUNT` or `UNTIL` is allowed, not both.
     ///   - There may be 1 `INTERVAL=` followed by a positive integer.
-    ///   - There may be 1 `BYMONTH=` followed by a comma separated list of 1 or more month numbers in the range 1 to 12, or -12 to -1.
-    ///   - There may be 1 `BYDAY=` followed by a comma separated list of 1 or more days of the week, each optionally preceded by a week number. Days of the week must be `SU`, `MO`, `TU`, `WE`, `TH`, `FR`, or `SA`. Week numbers must be in the range 1 to 5 or -5 to -1.
-    ///   - There may be 1 `BYMONTHDAY=` followed by a comma separated list of days of the month in the range 1 to 31 or -31 to -1.
-    ///   - There may be 1 `BYYEARDAY=` followed by a comma separated list of days of the year in the range 1 to 366 or -366 to -1.
-    ///   - There may be 1 `BYWEEKNO=` followed by a comma separated list of week numbers in the range 1 to 53 or -53 to -1.
-    ///   - There may be 1 `WKST=` followed by a day of the week. Days of the week must be `SU`, `MO`, `TU`, `WE`, `TH`, `FR`, or `SA`.
+    ///   - There may be 1 `BYMONTH=` followed by a comma separated list of 1 or more month numbers in the range 1 to
+    /// 12, or -12 to -1.
+    ///   - There may be 1 `BYDAY=` followed by a comma separated list of 1 or more days of the week, each optionally
+    /// preceded by a week number. Days of the week must be `SU`, `MO`, `TU`, `WE`, `TH`, `FR`, or `SA`. Week numbers
+    /// must be in the range 1 to 5 or -5 to -1.
+    ///   - There may be 1 `BYMONTHDAY=` followed by a comma separated list of days of the month in the range 1 to 31 or
+    /// -31 to -1.
+    ///   - There may be 1 `BYYEARDAY=` followed by a comma separated list of days of the year in the range 1 to 366 or
+    /// -366 to -1.
+    ///   - There may be 1 `BYWEEKNO=` followed by a comma separated list of week numbers in the range 1 to 53 or -53 to
+    /// -1.
+    ///   - There may be 1 `WKST=` followed by a day of the week. Days of the week must be `SU`, `MO`, `TU`, `WE`, `TH`,
+    /// `FR`, or `SA`.
     ///   - There may be 1 `BYSETPOS=` following by a comma separated list of positive integers.
     ///   - Each clause must be separated by a semicolon (`;`). No trailing semicolon should be used.
     ///
@@ -160,7 +171,18 @@ public class RuleParser {
             let daysOfTheMonth,
             let monthsOfTheYear
         {
-            return RecurrenceRule(recurrenceWith: frequency, interval: interval, daysOfTheWeek: daysOfTheWeek, daysOfTheMonth: daysOfTheMonth, monthsOfTheYear: monthsOfTheYear, weeksOfTheYear: weeksOfTheYear, daysOfTheYear: daysOfTheYear, setPositions: setPositions, end: recurrenceEnd, firstDay: firstDayOfTheWeek)
+            return RecurrenceRule(
+                recurrenceWith: frequency,
+                interval: interval,
+                daysOfTheWeek: daysOfTheWeek,
+                daysOfTheMonth: daysOfTheMonth,
+                monthsOfTheYear: monthsOfTheYear,
+                weeksOfTheYear: weeksOfTheYear,
+                daysOfTheYear: daysOfTheYear,
+                setPositions: setPositions,
+                end: recurrenceEnd,
+                firstDay: firstDayOfTheWeek
+            )
         } else {
             return nil // no FREQ
         }
@@ -184,7 +206,7 @@ public class RuleParser {
                 if let timeZoneIdentifier = from.timeZoneIdentifier {
                     formatter.timeZone = TimeZone(identifier: timeZoneIdentifier)
                 }
-                parts.append("UNTIL=\(formatter.string(from: date))")
+                parts.append("UNTIL=\(untilFormat.string(from: date))")
             case let .occurrenceCount(count):
                 parts.append("COUNT=\(count)")
             }
@@ -221,11 +243,11 @@ public class RuleParser {
         guard let dateStart = from.dateStart, let timeZoneIdentifer = from.timeZoneIdentifier else {
             return nil
         }
-        let formatter = untilFormat
+        let formatter = dateStartFormat
         if let timeZoneIdentifier = from.timeZoneIdentifier {
             formatter.timeZone = TimeZone(identifier: timeZoneIdentifier)
         }
-        return "DTSTART;TZID=\(timeZoneIdentifer):\(formatter.string(from: dateStart))"
+        return "DTSTART;TZID=\(timeZoneIdentifer):\(dateStartFormat.string(from: dateStart))"
     }
 
     /// Including date start
@@ -378,7 +400,8 @@ public class RuleParser {
             var weekday: NSString?
             if scanner.scanCharacters(from: .alphanumerics, into: &weekday), scanner.isAtEnd {
                 if let weekday, let dow = parse(byWeekStart: weekday as String) {
-                    let rec = count == 0 ? RecurrenceDayOfWeek(dayOfTheWeek: dow) : RecurrenceDayOfWeek(dayOfTheWeek: dow, weekNumber: count)
+                    let rec = count == 0 ? RecurrenceDayOfWeek(dayOfTheWeek: dow) :
+                        RecurrenceDayOfWeek(dayOfTheWeek: dow, weekNumber: count)
                     res.append(rec)
                 } else {
                     return nil

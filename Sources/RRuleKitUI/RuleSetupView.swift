@@ -8,18 +8,20 @@
 import RRuleKit
 import SwiftUI
 
-public struct RuleSetupView: View {
+public struct RuleSetupView<HeaderView: View>: View {
     @Environment(\.calendar) private var calendar
     @Environment(\.presentationMode) private var presentationMode
 
     @Binding private var rule: RecurrenceRule
+    private let header: () -> HeaderView
 
     private var defaultRules: [RecurrenceRule] = []
     private var title = Localized.setup
     private var style = Style()
 
-    public init(rule: Binding<RecurrenceRule>) {
+    public init(rule: Binding<RecurrenceRule>, header: @escaping () -> HeaderView) {
         _rule = rule
+        self.header = header
     }
 
     public var body: some View {
@@ -45,16 +47,32 @@ public struct RuleSetupView: View {
     }
 
     private var contentView: some View {
+        VStack(spacing: 0) {
+            headerView
+            listView
+        }
+    }
+
+    private var headerView: some View {
+        header()
+    }
+
+    private var listView: some View {
         List {
             Section {
                 repeatCell
 
-                switch rule.frequency {
-                case .minutely, .hourly:
-                    EmptyView()
-                default:
-                    timeCell
-                }
+//                switch rule.frequency {
+//                case .minutely, .hourly:
+//                    EmptyView()
+//                default:
+//                    timeCell
+//                }
+            }
+
+            Section {
+                timeCell
+                dateStartPicker
             }
 
             Section {
@@ -87,12 +105,22 @@ public struct RuleSetupView: View {
     }
 
     private var timeCell: some View {
+        HStack {
+            Text(Localized.time)
+                .foregroundColor(style.labelPrimaryColor)
+
+            Spacer()
+        }
+        .font(.body)
+    }
+
+    private var dateStartPicker: some View {
         DatePicker(Localized.time, selection: .init {
             rule.dateStart ?? Date()
         } set: { newDate in
             rule.dateStart = newDate
-        }, displayedComponents: [.hourAndMinute])
-            .datePickerStyle(.compact)
+        })
+        .datePickerStyle(.graphical)
     }
 
     private var advanceCell: some View {

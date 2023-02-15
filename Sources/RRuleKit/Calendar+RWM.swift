@@ -12,15 +12,20 @@ public extension Calendar {
     /// Returns the range of the given weekday for the supplied year or month of year.
     ///
     ///  Examples:
-    ///    - To find out how many Tuesdays there are in 2018, pass in `3` for the `weekday` and `2018` for the `year` and the default of `0` for the `month`.
-    ///    - To find out how many Saturdays there are in May of 2018, pass in `7` for the `weekday`, `2018` for the `year`, and `5` for the `month`.
-    ///    - To find out how many Mondays there are in the last month of 2018, pass in `2` for the `weekday`, `2018` for the `year`, and `-1` for the `month`.
+    ///    - To find out how many Tuesdays there are in 2018, pass in `3` for the `weekday` and `2018` for the `year`
+    /// and the default of `0` for the `month`.
+    ///    - To find out how many Saturdays there are in May of 2018, pass in `7` for the `weekday`, `2018` for the
+    /// `year`, and `5` for the `month`.
+    ///    - To find out how many Mondays there are in the last month of 2018, pass in `2` for the `weekday`, `2018` for
+    /// the `year`, and `-1` for the `month`.
     ///
     /// - Parameters:
     ///   - weekday: The day of the week. Values range from 1 to 7, with Sunday being 1.
     ///   - year: A calendar year.
-    ///   - month: A month within the calendar year. The value of `0` means the month is ignored. Negative values start from the last month of the year. `-1` is the last month. `-2` is the next-to-last month, etc.
-    /// - Returns: A range from `1` through `n` where `n` is the number of times the given weekday appears in the year or month of the year. If `month` is out of range for the year, the result is `nil`.
+    ///   - month: A month within the calendar year. The value of `0` means the month is ignored. Negative values start
+    /// from the last month of the year. `-1` is the last month. `-2` is the next-to-last month, etc.
+    /// - Returns: A range from `1` through `n` where `n` is the number of times the given weekday appears in the year
+    /// or month of the year. If `month` is out of range for the year, the result is `nil`.
     func range(of weekday: Int, in year: Int, month: Int = 0) -> ClosedRange<Int>? {
         if month > 0 {
             let comps = DateComponents(year: year, month: month, weekday: weekday, weekdayOrdinal: -1)
